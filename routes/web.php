@@ -14,7 +14,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    $links = \App\Link::all();
+
+    return view('welcome', ['links' => $links]); //here 'links' is the key and $links is the value/data
 });
 
 Auth::routes();
