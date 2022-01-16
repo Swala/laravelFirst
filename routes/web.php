@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,3 +23,21 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::get('/submit', function (){
+    return view('submit');
+});
+
+Route::post('/submit', function (Request $request){ //Illuminate\Http\Request holds the POST data
+    $data = $request->validate(([ //validates the form
+        'title' => 'required|max:225', // with | we can define multiple rules
+        'url' => 'required|url|max:225',
+        'description'=> 'required|max:225',
+
+    ]));
+
+    $link = tap(new App\Link($data))->save(); //use data to populate the form. tap creates new Link model instance and saves AND returns it
+
+    return redirect('/');
+
+});
